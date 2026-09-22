@@ -1,0 +1,35 @@
+
+name: Despliegue en Google Cloud
+
+on:
+    push:
+        branches:
+            - "*"
+
+jobs:
+    deploy:
+        name: Despliegue
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            
+            - id: auth
+              name: "Autenticando en Google Cloud"
+              uses: "google-github-actions/auth@v2"
+              with:
+                  credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+
+            - id: delete
+              name: "Eliminando servicio existente"
+              run: |
+                  gcloud run services delete funcion-pablo --region=us-central1 --quiet 
+                  
+            - id: deploy
+              name: "Desplegando en Google Cloud"
+              uses: "google-github-actions/deploy-cloud-functions@v3"
+              timeout-minutes: 10
+              with:
+                  name: "funcion-pablo"
+                  runtime: "python312"
+                  entry_point: "hello_http"
+                  region: "us-central1"
