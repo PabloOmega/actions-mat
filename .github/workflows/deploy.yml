@@ -19,10 +19,10 @@ jobs:
               with:
                   credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
 
-            - id: delete
-              name: "Eliminando servicio existente"
-              run: |
-                  gcloud run services delete funcion-pablo --region=us-central1 --quiet 
+            # - id: delete
+            #   name: "Eliminando servicio existente"
+            #   run: |
+            #       gcloud run services delete funcion-pablo --region=us-central1 --quiet 
                   
             - id: deploy
               name: "Desplegando en Google Cloud"
